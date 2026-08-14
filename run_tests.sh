@@ -93,12 +93,16 @@ for dir in tests/${FILTER}*/; do
   for input in "$dir"*.in; do
     [ -f "$input" ] || continue
     expected="${input%.in}.out"
-    actual="$(run_one "$input")"
-    if [ "$actual" = "$(cat "$expected")" ]; then
+    # Strip trailing \r from every line on both sides so CRLF vs LF
+    # line-ending differences (common on Windows/Git Bash) never cause
+    # a false FAIL when the visible text is actually identical.
+    actual="$(run_one "$input" | tr -d '\r')"
+    expected_content="$(cat "$expected" | tr -d '\r')"
+    if [ "$actual" = "$expected_content" ]; then
       pass=$((pass+1)); echo "PASS  $input"
     else
       fail=$((fail+1)); echo "FAIL  $input"
-      echo "  expected: $(head -c 200 "$expected")"
+      echo "  expected: $(printf '%s' "$expected_content" | head -c 200)"
       echo "  got:      $(printf '%s' "$actual" | head -c 200)"
     fi
   done
