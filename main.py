@@ -1,38 +1,28 @@
-class BankAccount:
-    def __init__(self, owner, balance = 0):
-        self.balance = balance
-        self.owner = owner
-    # Implement deposit, withdraw
+class Shape:
+    def area(self):
+        return 0
 
-    def deposit(self, amount):
-        self.balance += amount
-    def withdraw(self, amount):
-        if amount > self.balance:
-            raise ValueError("insufficient funds")
-        self.balance -= amount
+# class Square(Shape): ...
+class Square(Shape):
+    def __init__(self, sides):
+        self.sides = sides
+    def area(self):
+        return self.sides ** 2
 
-account = BankAccount("Alice")
-import sys
-for line in sys.stdin:
-    parts = line.strip().split()
-    if not parts:
-        continue
-    cmd = parts[0]
-    # Handle the three commands
+# class Circle(Shape): ...
+class Circle(Shape):
+    def __init__(self, r):
+        self.r = r
+    def area(self):
+        return 3.14 * self.r ** 2
 
-    if cmd == "deposit":
-        amount = int(parts[1])
-        account.deposit(amount)
-
-    elif cmd == "withdraw":
-        amount = int(parts[1])
-        try:
-            account.withdraw(amount)
-        except ValueError as e:
-            print(f"{e}")
-
-    elif cmd == "balance":
-        print(account.balance)
-
-    else:
-        print(f"Unknown command: {cmd}")
+kind = input().strip()
+val = float(input())
+# Build shape and print area.
+if kind == "square":
+    shape = Square(val)
+elif kind == "circle":
+    shape = Circle(val)
+else:
+    raise ValueError(f"Unknown shape: {kind}")
+print(shape.area())
