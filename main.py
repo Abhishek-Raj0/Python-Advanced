@@ -1,9 +1,9 @@
-import re
-n = int(input())
-for _ in range(n):
-    email = input().strip()
-    # Validate and print result
-    if re.match(r"^[^@]+@[^@]+\.[^@]+$", email):
-        print("valid")
-    else:
-        print("invalid")
+import json
+
+line = input()
+# Parse the JSON, handle missing 'name' key, handle invalid JSON.
+try:
+    data = json.loads(line)
+    print(data.get("name", "not found"))
+except json.JSONDecodeError:
+    print("invalid json")
